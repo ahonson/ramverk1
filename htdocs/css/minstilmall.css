@@ -6950,14 +6950,32 @@ code {
     color: #333;
 }
 
-p a {
+a {
     color: #dd1;
 }
 
-p a:visited {
+a:visited {
     color: #aa1;
+}
+
+a:hover {
+    color: #FF8C00;
+    font-size: larger;
 }
 
 .outer-wrap-footer {
     background-color: #111;
+}
+
+::selection {
+  color: #320113;
+  background: #dd1;
+}
+
+figcaption {
+    text-align: center;
+}
+
+ul li ul li {
+    color: #222;
 }

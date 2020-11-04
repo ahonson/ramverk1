@@ -21,10 +21,14 @@ Om
 
 Detta innehåll är skrivet i markdown och du hittar innehållet i filen `content/om.md`.
 
-Skriv några kloka ord om kursen?
+Denna webbplats är byggd som en del i kursen Webbaserade ramverk och designmönster. Här är länken till webbplatsens [GitHubrepo](https://github.com/ahonson/ramverk1).
+Kursen omfattar sex kursmoment och ett avslutande projekt.
 
-Lägg till en representativ bild för kursen, enligt ditt egna val.
+<!-- 1. ramverk
+1. MVC
+1. DI
+1. modul
+1. CI
+1. DBdrivna modeller -->
 
-[FIGURE src=image/elephant.png?w=300 caption="En fin bil som demobild."]
-
-Här är länken till projektets [GitHubrepo](https://github.com/ahonson/ramverk1).
+[FIGURE src=image/elephant.png?w=400 class="center" caption="En blå elefant som demobild."]
