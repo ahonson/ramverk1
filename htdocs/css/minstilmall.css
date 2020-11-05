@@ -6946,7 +6946,6 @@ body {
 
 .wrap-sidebar .block h4,
 code {
-    /* background-color: #120; */
     color: #333;
 }
 
@@ -6963,6 +6962,7 @@ a:hover {
     font-size: larger;
 }
 
+html,
 .outer-wrap-footer {
     background-color: #111;
 }
