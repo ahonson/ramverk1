@@ -1,3 +1,3 @@
 #### Redovisa på GitHub
 
-Skriv något kort om ditt redovisa-repo och länka till [repot för me/redovisa på GitHub](XXX).
+Webbplatsens källkod (`me/redovisa`) ligger i följande [Githubrepo](https://github.com/ahonson/ramverk1).
