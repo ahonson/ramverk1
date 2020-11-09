@@ -31,12 +31,11 @@ class IPController implements ContainerInjectableInterface
      *
      * @return object
      */
-    public function indexAction() : object
+    public function indexActionGet() : object
     {
         $page = $this->di->get("page");
         $data = [
-            "mount" => "ip/",
-            "player" => "Erik"
+            "ip" => "127.0.0.1"
         ];
 
         $page->add(
@@ -49,12 +48,14 @@ class IPController implements ContainerInjectableInterface
         ]);
     }
 
-    public function newpageAction() : object
+    public function newpageActionGet() : object
     {
+        $session = $this->di->get("session");
         $page = $this->di->get("page");
         $page->add(
             "ip/newpage",
             [
+                "currentip" => $session->get("userip"),
                 "mount" => "ip/newpage"
             ]
         );
@@ -65,10 +66,25 @@ class IPController implements ContainerInjectableInterface
     }
 
 
-    public function redirectpageAction() : object
+    /**
+     * This is the index method action, it handles:
+     * ANY METHOD mountpoint
+     * ANY METHOD mountpoint/
+     * ANY METHOD mountpoint/index
+     *
+     * @return object
+     */
+    public function indexActionPost() : object
     {
+        // echo "MOST";
+        // die("VÉGE");
+        $request = $this->di->get("request");
         $response = $this->di->get("response");
+        $session = $this->di->get("session");
 
-        return $response->redirect("ip");
+        $userip = $request->getPost("userip");
+        $session->set("userip", $userip);
+
+        return $response->redirect("ip/newpage");
     }
 }
