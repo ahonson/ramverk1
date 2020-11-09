@@ -52,11 +52,18 @@ class IPController implements ContainerInjectableInterface
     {
         $session = $this->di->get("session");
         $page = $this->di->get("page");
+
+        $request = $this->di->get("request");
+        $userip = new IPCheck($session->get("userip"));
+        $ipmsg = $userip->printIPMessage();
+        $domainmsg = $userip->printDomainMessage();
+
         $page->add(
             "ip/newpage",
             [
                 "currentip" => $session->get("userip"),
-                "mount" => "ip/newpage"
+                "ipmsg" => $ipmsg,
+                "domainmsg" => $domainmsg
             ]
         );
 

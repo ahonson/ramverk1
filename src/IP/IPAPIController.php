@@ -9,7 +9,6 @@ use Anax\Commons\ContainerInjectableInterface;
 use Anax\Commons\ContainerInjectableTrait;
 use Anax\Route\Exception\NotFoundException;
 
-
 /**
  * A sample controller to show how a controller class can be implemented.
  * The controller will be injected with $app if implementing the interface
@@ -54,6 +53,41 @@ class IPAPIController implements ContainerInjectableInterface
             "domainmsg" => $domainmsg
         ];
 
-        return [json_encode($myjson)];
+        return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];
+    }
+
+
+    /**
+     * This is the index method action, it handles:
+     * ANY METHOD mountpoint
+     * ANY METHOD mountpoint/
+     * ANY METHOD mountpoint/index
+     *
+     * @return object
+     */
+    public function indexActionPost() : array
+    {
+        $request = $this->di->get("request");
+        $ip  = $request->getPost("ip", "");
+        $userip = new IPCheck($ip);
+        $ip4 = $userip->ipv4();
+        $ip6 = $userip->ipv6();
+        $userinput = $userip->getUserInput();
+        $corrected = $userip->getCorrectedInput();
+        $domain = $userip->getDomainName();
+        $ipmsg = $userip->printIPMessage();
+        $domainmsg = $userip->printDomainMessage();
+
+        $myjson = [
+            "ip4" => $ip4,
+            "ip6" => $ip6,
+            "userinput" => $userinput,
+            "corrected" => $corrected,
+            "domain" => $domain,
+            "ipmsg" => $ipmsg,
+            "domainmsg" => $domainmsg
+        ];
+
+        return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];
     }
 }
