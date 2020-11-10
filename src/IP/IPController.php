@@ -31,11 +31,40 @@ class IPController implements ContainerInjectableInterface
      *
      * @return object
      */
+    public function initAction() : object
+    {
+        $response = $this->di->get("response");
+        $session = $this->di->get("session");
+        $session->set("userip", null);
+        return $response->redirect("ip");
+    }
+
+
+    /**
+     * This is the index method action, it handles:
+     * ANY METHOD mountpoint
+     * ANY METHOD mountpoint/
+     * ANY METHOD mountpoint/index
+     *
+     * @return object
+     */
     public function indexActionGet() : object
     {
         $page = $this->di->get("page");
+        $session = $this->di->get("session");
+
+        if ($session->get("userip")) {
+            $userip = new IPCheck($session->get("userip"));
+            $ipmsg = $userip->printIPMessage();
+            $domainmsg = $userip->printDomainMessage();
+        } else {
+            $ipmsg = "";
+            $domainmsg = "";
+        }
+
         $data = [
-            "ip" => "127.0.0.1"
+            "ipmsg" => $ipmsg,
+            "domainmsg" => $domainmsg
         ];
 
         $page->add(
@@ -48,31 +77,6 @@ class IPController implements ContainerInjectableInterface
         ]);
     }
 
-    public function newpageActionGet() : object
-    {
-        $session = $this->di->get("session");
-        $page = $this->di->get("page");
-
-        $request = $this->di->get("request");
-        $userip = new IPCheck($session->get("userip"));
-        $ipmsg = $userip->printIPMessage();
-        $domainmsg = $userip->printDomainMessage();
-
-        $page->add(
-            "ip/newpage",
-            [
-                "currentip" => $session->get("userip"),
-                "ipmsg" => $ipmsg,
-                "domainmsg" => $domainmsg
-            ]
-        );
-
-        return $page->render([
-            "title" => "My new IP",
-        ]);
-    }
-
-
     /**
      * This is the index method action, it handles:
      * ANY METHOD mountpoint
@@ -83,8 +87,6 @@ class IPController implements ContainerInjectableInterface
      */
     public function indexActionPost() : object
     {
-        // echo "MOST";
-        // die("VÉGE");
         $request = $this->di->get("request");
         $response = $this->di->get("response");
         $session = $this->di->get("session");
@@ -92,6 +94,6 @@ class IPController implements ContainerInjectableInterface
         $userip = $request->getPost("userip");
         $session->set("userip", $userip);
 
-        return $response->redirect("ip/newpage");
+        return $response->redirect("ip");
     }
 }

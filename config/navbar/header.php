@@ -75,7 +75,7 @@ return [
         ],
         [
             "text" => "IP",
-            "url" => "ip",
+            "url" => "ip/init",
             "title" => "IP validator",
         ],
     ],

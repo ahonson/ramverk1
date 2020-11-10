@@ -30,7 +30,28 @@ class IPAPIController implements ContainerInjectableInterface
      *
      * @return object
      */
-    public function indexActionGet() : array
+    public function indexActionGet() : object
+    {
+        $page = $this->di->get("page");
+        $page->add(
+            "ip/ipapi"
+        );
+
+        return $page->render([
+            "title" => "My IP",
+        ]);
+    }
+
+
+    /**
+     * This is the index method action, it handles:
+     * ANY METHOD mountpoint
+     * ANY METHOD mountpoint/
+     * ANY METHOD mountpoint/index
+     *
+     * @return object
+     */
+    public function checkActionGet() : array
     {
         $request = $this->di->get("request");
         $ip  = $request->getGet("ip", "");
@@ -65,7 +86,7 @@ class IPAPIController implements ContainerInjectableInterface
      *
      * @return object
      */
-    public function indexActionPost() : array
+    public function checkActionPost() : array
     {
         $request = $this->di->get("request");
         $ip  = $request->getPost("ip", "");
