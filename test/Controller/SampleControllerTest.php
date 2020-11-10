@@ -22,7 +22,6 @@ class SampleControllerTest extends TestCase
     }
 
 
-
     /**
      * Test the route "info".
      */
@@ -33,7 +32,6 @@ class SampleControllerTest extends TestCase
         $res = $controller->infoActionGet();
         $this->assertContains("db is active", $res);
     }
-
 
 
     /**
@@ -59,5 +57,82 @@ class SampleControllerTest extends TestCase
         $this->assertContains("configuration", $res);
         $this->assertContains("request", $res);
         $this->assertContains("response", $res);
+    }
+
+    /**
+     * Test the route "create action".
+     */
+    public function testCreateActionGet()
+    {
+        $controller = new SampleController();
+        $controller->initialize();
+        $res = $controller->createActionGet();
+        $this->assertContains("db is active", $res);
+    }
+
+    /**
+     * Test the route "create action".
+     */
+    public function testCreateActionPost()
+    {
+        $controller = new SampleController();
+        $controller->initialize();
+        $res = $controller->createActionPost();
+        $this->assertContains("db is active", $res);
+    }
+
+    /**
+     * Test the route "argument action".
+     */
+    public function testArgumentActionGet()
+    {
+        $controller = new SampleController();
+        $controller->initialize();
+        $res = $controller->argumentActionGet(12);
+        $this->assertContains("got argument", $res);
+    }
+
+    /**
+     * Test the route "default argument action".
+     */
+    public function testDefaultArgumentActionGet()
+    {
+        $controller = new SampleController();
+        $controller->initialize();
+        $res = $controller->defaultArgumentActionGet();
+        $this->assertContains("got argument", $res);
+    }
+
+    /**
+     * Test the route "typed argument action".
+     */
+    public function testTypedArgumentActionGet()
+    {
+        $controller = new SampleController();
+        $controller->initialize();
+        $res = $controller->typedArgumentActionGet("", 0);
+        $this->assertContains("got string argument", $res);
+    }
+
+    /**
+     * Test the route "variadic action".
+     */
+    public function testVariadicActionGet()
+    {
+        $controller = new SampleController();
+        $controller->initialize();
+        $res = $controller->variadicActionGet("", 0);
+        $this->assertContains("arguments", $res);
+    }
+
+    /**
+     * Test the route "catch all".
+     */
+    public function testCatchAllActionGet()
+    {
+        $controller = new SampleController();
+        $controller->initialize();
+        $res = $controller->catchAll("", 0);
+        $this->assertNull($res);
     }
 }

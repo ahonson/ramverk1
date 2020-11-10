@@ -1,6 +1,7 @@
 <?php
 
 namespace Anax\Controller;
+
 namespace arts19\IP;
 
 // use Anax\Commons\AppInjectableInterface;
@@ -8,7 +9,6 @@ namespace arts19\IP;
 use Anax\Commons\ContainerInjectableInterface;
 use Anax\Commons\ContainerInjectableTrait;
 use Anax\Route\Exception\NotFoundException;
-
 
 /**
  * A sample controller to show how a controller class can be implemented.

@@ -23,7 +23,8 @@ class IPCheck
         $this->input2ip6();
     }
 
-    public function ipv4() : bool {
+    public function ipv4() : bool
+    {
         $ipv4 = "/^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$/";
 
         if (preg_match($ipv4, $this->userinput)) {
@@ -33,7 +34,8 @@ class IPCheck
         return false;
     }
 
-    public function ipv6() : bool {
+    public function ipv6() : bool
+    {
         $ipv6 = "/^(([0-9]|[a-f]|[A-F]){4}:){7}([0-9]|[a-f]|[A-F]){4}$/";
 
         if (preg_match($ipv6, $this->correctedinput)) {
@@ -43,7 +45,8 @@ class IPCheck
         return false;
     }
 
-    private function input2ip6() : string {
+    private function input2ip6() : string
+    {
         $newip6 = [];
         if ($this->userinput) {
             $mymy = explode(":", $this->userinput);
@@ -62,15 +65,18 @@ class IPCheck
         return $this->correctedinput;
     }
 
-    public function getUserInput() : string {
+    public function getUserInput() : string
+    {
         return $this->userinput;
     }
 
-    public function getCorrectedInput() : string {
+    public function getCorrectedInput() : string
+    {
         return $this->correctedinput;
     }
 
-    public function setDomainName() : void {
+    public function setDomainName() : void
+    {
         if ($this->ipv4()) {
             if ($this->userinput != gethostbyaddr($this->userinput)) {
                 $this->domain = gethostbyaddr($this->userinput);
@@ -82,11 +88,13 @@ class IPCheck
         }
     }
 
-    public function getDomainName() : string {
+    public function getDomainName() : string
+    {
         return $this->domain;
     }
 
-    public function printIPMessage() : string {
+    public function printIPMessage() : string
+    {
         if ($this->ipv4()) {
             $lastChunk = "enligt IPv4.";
         } elseif ($this->ipv6()) {
@@ -98,7 +106,8 @@ class IPCheck
         return "Den inmatade strängen ($ip) validerar $lastChunk";
     }
 
-    public function printDomainMessage() : string {
+    public function printDomainMessage() : string
+    {
         $msg = "";
         if ($this->getDomainName()) {
             $msg = "Det tillhörande domännamnet är " . $this->getDomainName() . ".";

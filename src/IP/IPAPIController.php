@@ -1,6 +1,7 @@
 <?php
 
 namespace Anax\Controller;
+
 namespace arts19\IP;
 
 // use Anax\Commons\AppInjectableInterface;
