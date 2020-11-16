@@ -50,6 +50,11 @@ class IPCheck
         $newip6 = [];
         if ($this->userinput) {
             $mymy = explode(":", $this->userinput);
+            if ($mymy[0] === "") {
+                array_shift($mymy);
+            } elseif ($mymy[count($mymy) -1] === "") {
+                array_pop($mymy);
+            }
             $missing = 8 - count($mymy); // IPv6 has eight 16bit blocks
             for ($i=0; $i < count($mymy); $i++) {
                 array_push($newip6, str_pad($mymy[$i], 4, "0", STR_PAD_LEFT));
@@ -112,10 +117,21 @@ class IPCheck
         if ($this->getDomainName()) {
             $msg = "Det tillhörande domännamnet är " . $this->getDomainName() . ".";
         } elseif ($this->ipv4() || $this->ipv6()) {
-            $msg = "Men inget domännamn har hittats";
+            $msg = "Men inget domännamn har hittats.";
         } else {
             $msg = "Det finns inget domännamn att visa.";
         }
+        return $msg;
+    }
+
+    public function printAllMessages() : string
+    {
+        if ($this->userinput) {
+            $msg = "<h2>Resultat</h2><p>" . $this->printIPMessage() . "</p><p>" . $this->printDomainMessage() . "</p>";
+        } else {
+            $msg = "";
+        }
+
         return $msg;
     }
 }

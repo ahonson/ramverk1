@@ -12,9 +12,9 @@ namespace Anax\View;
 
 <form class="" action="" method="post">
     <label for="">Mata in en IP-adress enligt IPv4 eller IPv6: </label><br><br>
-    <input size="40" type="text" name="userip" value="" autofocus><br><br>
+    <input size="40" type="text" name="userip" value="<?= $usergeoinfo["ip"] ?>" autofocus><br><br>
     <input type="submit" name="save" value="Validera">
 </form>
 
-<p><?= $ipmsg ?></p>
-<p><?= $domainmsg ?></p>
+<div><?= $ipmsg ?></div>
+<p><?= $inputgeoinfo ?></p>

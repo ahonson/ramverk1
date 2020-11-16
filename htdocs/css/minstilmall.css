@@ -6987,3 +6987,23 @@ figcaption {
 ul li ul li {
     color: #222;
 }
+
+table tr,
+table td {
+    border: 1px solid white;
+}
+
+tr th {
+    text-align: center !important;
+    font-weight: bold;
+    background-color: #000;
+    color: #ccc;
+}
+
+tr:nth-child(even) {
+    background: #231;
+}
+
+.inlineimg {
+    max-height: 20px;
+}
