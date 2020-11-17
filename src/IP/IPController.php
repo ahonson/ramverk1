@@ -39,18 +39,21 @@ class IPController implements ContainerInjectableInterface
         return $response->redirect("ip");
     }
 
-    private function getRealIpAddr(){
-     if ( !empty($_SERVER['HTTP_CLIENT_IP']) ) {
-      // Check IP from internet.
-      $ip = $_SERVER['HTTP_CLIENT_IP'];
-     } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
-      // Check IP is passed from proxy.
-      $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-     } else {
-      // Get IP address from remote address.
-      $ip = $_SERVER['REMOTE_ADDR'];
-     }
-     return $ip;
+    private function getRealIpAddr()
+    {
+        if ( !empty($_SERVER['HTTP_CLIENT_IP']) ) {
+            // Check IP from internet.
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
+            // Check IP is passed from proxy.
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif ( !empty($_SERVER['REMOTE_ADDR']) ) {
+            // Get IP address from remote address.
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ip = "94.21.49.200";
+        }
+        return $ip;
     }
 
     /**
@@ -64,7 +67,7 @@ class IPController implements ContainerInjectableInterface
     public function indexActionGet() : object
     {
         // this loads $apikey
-        include('../config/api/ipstack.php');
+        include(__DIR__ . '/../../config/api/ipstack.php');
         $page = $this->di->get("page");
         $session = $this->di->get("session");
 

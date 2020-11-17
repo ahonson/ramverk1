@@ -34,8 +34,13 @@ class IPAPIController implements ContainerInjectableInterface
     public function indexActionGet() : object
     {
         $page = $this->di->get("page");
+        $ipaddress = $this->getRealIpAddr();
+        $data = [
+            "ip" => $ipaddress
+        ];
         $page->add(
-            "ip/ipapi"
+            "ip/ipapi",
+            $data
         );
 
         return $page->render([
@@ -43,6 +48,22 @@ class IPAPIController implements ContainerInjectableInterface
         ]);
     }
 
+    private function getRealIpAddr()
+    {
+        if ( !empty($_SERVER['HTTP_CLIENT_IP']) ) {
+            // Check IP from internet.
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
+            // Check IP is passed from proxy.
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif ( !empty($_SERVER['REMOTE_ADDR']) ) {
+            // Get IP address from remote address.
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ip = "94.21.49.200";
+        }
+        return $ip;
+    }
 
     /**
      * This is the index method action, it handles:
@@ -65,6 +86,18 @@ class IPAPIController implements ContainerInjectableInterface
         $ipmsg = $userip->printIPMessage();
         $domainmsg = $userip->printDomainMessage();
 
+        // this loads $apikey
+        include(__DIR__ . '/../../config/api/ipstack.php');
+        $geoip = new IPGeotag($apikey);
+        $continent = $geoip->parseJson($ip, "continent_name");
+        $country = $geoip->parseJson($ip, "country_name");
+        $city = $geoip->parseJson($ip, "city");
+        $zip = $geoip->parseJson($ip, "zip");
+        $language = $geoip->parseJson($ip, "location", "languages", "name");
+        $latitude = $geoip->parseJson($ip, "latitude");
+        $longitude = $geoip->parseJson($ip, "longitude");
+        $map = $geoip->getmap($ip);
+
         $myjson = [
             "ip4" => $ip4,
             "ip6" => $ip6,
@@ -72,7 +105,15 @@ class IPAPIController implements ContainerInjectableInterface
             "corrected" => $corrected,
             "domain" => $domain,
             "ipmsg" => $ipmsg,
-            "domainmsg" => $domainmsg
+            "domainmsg" => $domainmsg,
+            "continent" => $continent,
+            "country" => $country,
+            "city" => $city,
+            "zip" => $zip,
+            "language" => $language,
+            "latitude" => $latitude,
+            "longitude" => $longitude,
+            "map" => $map
         ];
 
         return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];
@@ -100,6 +141,18 @@ class IPAPIController implements ContainerInjectableInterface
         $ipmsg = $userip->printIPMessage();
         $domainmsg = $userip->printDomainMessage();
 
+        // this loads $apikey
+        include(__DIR__ . '/../../config/api/ipstack.php');
+        $geoip = new IPGeotag($apikey);
+        $continent = $geoip->parseJson($ip, "continent_name");
+        $country = $geoip->parseJson($ip, "country_name");
+        $city = $geoip->parseJson($ip, "city");
+        $zip = $geoip->parseJson($ip, "zip");
+        $language = $geoip->parseJson($ip, "location", "languages", "name");
+        $latitude = $geoip->parseJson($ip, "latitude");
+        $longitude = $geoip->parseJson($ip, "longitude");
+        $map = $geoip->getmap($ip);
+
         $myjson = [
             "ip4" => $ip4,
             "ip6" => $ip6,
@@ -107,7 +160,15 @@ class IPAPIController implements ContainerInjectableInterface
             "corrected" => $corrected,
             "domain" => $domain,
             "ipmsg" => $ipmsg,
-            "domainmsg" => $domainmsg
+            "domainmsg" => $domainmsg,
+            "continent" => $continent,
+            "country" => $country,
+            "city" => $city,
+            "zip" => $zip,
+            "language" => $language,
+            "latitude" => $latitude,
+            "longitude" => $longitude,
+            "map" => $map
         ];
 
         return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];

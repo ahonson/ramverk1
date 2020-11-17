@@ -43,6 +43,28 @@ class IPGeotag
         return $jsonresp;
     }
 
+    public function getmap($input) : string
+    {
+        $myjson = $this->checkdefaultip($input);
+        if ($myjson["latitude"]) {
+            $map = "https://www.openstreetmap.org/?mlat=" . $myjson["latitude"] . "&mlon=" . $myjson["longitude"] . "#map=10/" . $myjson["latitude"] . "/" . $myjson["longitude"];
+            return $map;
+        }
+        return "";
+    }
+
+    public function parseJson($ip, $arg1, $arg2=null, $arg3=null) : string
+    {
+        $jsonresp = $this->checkdefaultip($ip);
+        if ($arg3) {
+            return $jsonresp[$arg1][$arg2][0][$arg3] ?? "";
+        }
+        if ($arg2) {
+            return $jsonresp[$arg1][$arg2] ?? "";
+        }
+        return $jsonresp[$arg1] ?? "";
+    }
+
     public function checkinputip($input) : string
     {
         if ($input) {
