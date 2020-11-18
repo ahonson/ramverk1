@@ -53,7 +53,7 @@ class IPGeotag
         return "";
     }
 
-    public function parseJson($ip, $arg1, $arg2=null, $arg3=null) : string
+    public function parseJson($ip, $arg1, $arg2 = null, $arg3 = null) : string
     {
         $jsonresp = $this->checkdefaultip($ip);
         if ($arg3) {

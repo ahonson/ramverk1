@@ -39,22 +39,22 @@ class IPController implements ContainerInjectableInterface
         return $response->redirect("ip");
     }
 
-    private function getRealIpAddr()
-    {
-        if ( !empty($_SERVER['HTTP_CLIENT_IP']) ) {
-            // Check IP from internet.
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
-            // Check IP is passed from proxy.
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } elseif ( !empty($_SERVER['REMOTE_ADDR']) ) {
-            // Get IP address from remote address.
-            $ip = $_SERVER['REMOTE_ADDR'];
-        } else {
-            $ip = "94.21.49.200";
-        }
-        return $ip;
-    }
+    // private function getRealIpAddr()
+    // {
+    //     if ( !empty($_SERVER['HTTP_CLIENT_IP']) ) {
+    //         // Check IP from internet.
+    //         $ip = $_SERVER['HTTP_CLIENT_IP'];
+    //     } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
+    //         // Check IP is passed from proxy.
+    //         $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    //     } elseif ( !empty($_SERVER['REMOTE_ADDR']) ) {
+    //         // Get IP address from remote address.
+    //         $ip = $_SERVER['REMOTE_ADDR'];
+    //     } else {
+    //         $ip = "94.21.49.200";
+    //     }
+    //     return $ip;
+    // }
 
     /**
      * This is the index method action, it handles:
@@ -72,7 +72,8 @@ class IPController implements ContainerInjectableInterface
         $session = $this->di->get("session");
 
         // $ipaddress = $_SERVER['REMOTE_ADDR'];
-        $ipaddress = $this->getRealIpAddr();
+        $realip = new RealIP();
+        $ipaddress = $realip->getRealIpAddr();
         $input = $session->get("userip") ? $session->get("userip") : "";
 
         $userip = new IPCheck($input);

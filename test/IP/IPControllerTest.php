@@ -60,7 +60,7 @@ class IPControllerTest extends TestCase
 
         // Test the controller action
         $res = $controller->indexActionPost();
-        $body = $res->getBody();
+        // $body = $res->getBody();
         $this->assertInstanceOf(ResponseUtility::class, $res);
     }
 
@@ -75,7 +75,7 @@ class IPControllerTest extends TestCase
 
         // Test the controller action
         $res = $controller->initAction();
-        $body = $res->getBody();
+        // $body = $res->getBody();
         $this->assertInstanceOf(ResponseUtility::class, $res);
     }
 }

@@ -34,7 +34,8 @@ class IPAPIController implements ContainerInjectableInterface
     public function indexActionGet() : object
     {
         $page = $this->di->get("page");
-        $ipaddress = $this->getRealIpAddr();
+        $realip = new RealIP();
+        $ipaddress = $realip->getRealIpAddr();
         $data = [
             "ip" => $ipaddress
         ];
@@ -48,22 +49,22 @@ class IPAPIController implements ContainerInjectableInterface
         ]);
     }
 
-    private function getRealIpAddr()
-    {
-        if ( !empty($_SERVER['HTTP_CLIENT_IP']) ) {
-            // Check IP from internet.
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
-            // Check IP is passed from proxy.
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } elseif ( !empty($_SERVER['REMOTE_ADDR']) ) {
-            // Get IP address from remote address.
-            $ip = $_SERVER['REMOTE_ADDR'];
-        } else {
-            $ip = "94.21.49.200";
-        }
-        return $ip;
-    }
+    // private function getRealIpAddr()
+    // {
+    //     if ( !empty($_SERVER['HTTP_CLIENT_IP']) ) {
+    //         // Check IP from internet.
+    //         $ip = $_SERVER['HTTP_CLIENT_IP'];
+    //     } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
+    //         // Check IP is passed from proxy.
+    //         $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    //     } elseif ( !empty($_SERVER['REMOTE_ADDR']) ) {
+    //         // Get IP address from remote address.
+    //         $ip = $_SERVER['REMOTE_ADDR'];
+    //     } else {
+    //         $ip = "94.21.49.200";
+    //     }
+    //     return $ip;
+    // }
 
     /**
      * This is the index method action, it handles:

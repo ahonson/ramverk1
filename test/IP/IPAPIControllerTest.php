@@ -55,6 +55,8 @@ class IPAPIControllerTest extends TestCase
         $controller->setDI($this->di);
 
         // Test the controller action
+        $request = $this->di->get("request");
+        $request->setGet("ip", "94.21.49.200");
         $res = $controller->checkActionGet();
         $this->assertIsArray($res);
     }
@@ -69,6 +71,8 @@ class IPAPIControllerTest extends TestCase
         $controller->setDI($this->di);
 
         // Test the controller action
+        $request = $this->di->get("request");
+        $request->setPost("ip", "94.21.49.200");
         $res = $controller->checkActionPost();
         $this->assertIsArray($res);
     }

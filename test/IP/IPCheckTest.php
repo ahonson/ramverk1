@@ -24,9 +24,12 @@ class IPCheckTest extends TestCase
      */
     public function testPrintIPMessage()
     {
-        $ipcheck = new IPCheck("4::5");
+        $ipcheck = new IPCheck("::5");
         $res = $ipcheck->printIPMessage();
+        $ipcheck1 = new IPCheck("blabla");
+        $res1 = $ipcheck1->printIPMessage();
         $this->assertIsString($res);
+        $this->assertIsString($res1);
     }
 
     /**
@@ -34,9 +37,12 @@ class IPCheckTest extends TestCase
      */
     public function testPrintDomainMessage()
     {
-        $ipcheck = new IPCheck("4::5");
+        $ipcheck = new IPCheck("4::");
         $res = $ipcheck->printDomainMessage();
+        $ipcheck1 = new IPCheck("blabla");
+        $res1 = $ipcheck1->printIPMessage();
         $this->assertIsString($res);
+        $this->assertIsString($res1);
     }
 
     /**
