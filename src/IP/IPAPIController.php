@@ -17,7 +17,7 @@ use Anax\Route\Exception\NotFoundException;
  * The controller is mounted on a particular route and can then handle all
  * requests for that mount point.
  *
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD)
  */
 class IPAPIController implements ContainerInjectableInterface
 {
@@ -48,23 +48,6 @@ class IPAPIController implements ContainerInjectableInterface
             "title" => "My IP",
         ]);
     }
-
-    // private function getRealIpAddr()
-    // {
-    //     if ( !empty($_SERVER['HTTP_CLIENT_IP']) ) {
-    //         // Check IP from internet.
-    //         $ip = $_SERVER['HTTP_CLIENT_IP'];
-    //     } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
-    //         // Check IP is passed from proxy.
-    //         $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    //     } elseif ( !empty($_SERVER['REMOTE_ADDR']) ) {
-    //         // Get IP address from remote address.
-    //         $ip = $_SERVER['REMOTE_ADDR'];
-    //     } else {
-    //         $ip = "94.21.49.200";
-    //     }
-    //     return $ip;
-    // }
 
     /**
      * This is the index method action, it handles:

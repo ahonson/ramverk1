@@ -3,8 +3,10 @@
 namespace arts19\IP;
 
 /**
- * A class for validating IP addresses.
- */
+  * A class for validating IP addresses.
+  *
+  * @SuppressWarnings(PHPMD)
+  */
 class IPCheck
 {
     /**

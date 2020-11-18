@@ -5,7 +5,8 @@ namespace arts19\IP;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Example test class.
+ * testing for IPGeotag
+ * @SuppressWarnings(PHPMD)
  */
 class IPGeotagTest extends TestCase
 {
