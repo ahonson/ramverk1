@@ -39,8 +39,8 @@ class IPCheckTest extends TestCase
     {
         $ipcheck = new IPCheck("4::");
         $res = $ipcheck->printDomainMessage();
-        $ipcheck1 = new IPCheck("blabla");
-        $res1 = $ipcheck1->printIPMessage();
+        $ipcheck1 = new IPCheck("345.45.453.4");
+        $res1 = $ipcheck1->printDomainMessage();
         $this->assertIsString($res);
         $this->assertIsString($res1);
     }
