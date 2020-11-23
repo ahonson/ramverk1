@@ -78,5 +78,10 @@ return [
             "url" => "ip/init",
             "title" => "IP validator",
         ],
+        [
+            "text" => "Väder",
+            "url" => "weather",
+            "title" => "Väder API",
+        ],
     ],
 ];

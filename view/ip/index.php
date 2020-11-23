@@ -11,10 +11,13 @@ namespace Anax\View;
 <p><a href="ipapi">Klicka här för att komma till IP-API:et.</a></p>
 
 <form class="" action="" method="post">
-    <label for="">Mata in en IP-adress enligt IPv4 eller IPv6: </label><br><br>
+    <label for="userip">Mata in en IP-adress enligt IPv4 eller IPv6: </label><br><br>
     <input size="40" type="text" name="userip" value="<?= $usergeoinfo["ip"] ?>" autofocus><br><br>
     <input type="submit" name="save" value="Validera">
 </form>
 
 <div><?= $ipmsg ?></div>
 <p><?= $inputgeoinfo ?></p>
+
+<p><?= var_dump($mycurl) ?></p>
+<p><?= $mycurl["firstName"] ?></p>

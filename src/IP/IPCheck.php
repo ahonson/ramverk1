@@ -25,6 +25,14 @@ class IPCheck
         $this->input2ip6();
     }
 
+    public function validip() : bool
+    {
+        if ($this->ipv4() || $this->ipv6()) {
+            return true;
+        }
+        return false;
+    }
+
     public function ipv4() : bool
     {
         $ipv4 = "/^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$/";
