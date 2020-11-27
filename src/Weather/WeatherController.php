@@ -9,6 +9,8 @@ namespace arts19\Weather;
 use Anax\Commons\ContainerInjectableInterface;
 use Anax\Commons\ContainerInjectableTrait;
 use Anax\Route\Exception\NotFoundException;
+use arts19\IP\IPGeotag;
+use arts19\IP\RealIP;
 
 /**
  * A sample controller to show how a controller class can be implemented.
@@ -34,9 +36,18 @@ class WeatherController implements ContainerInjectableInterface
     public function indexActionGet() : object
     {
         $page = $this->di->get("page");
+        $session = $this->di->get("session");
+        $realip = new RealIP();
+        $ipaddress = $realip->getRealIpAddr();
+        $data = [
+            "warning" => $session->get("warning"),
+            "ip" => $ipaddress
+        ];
+        $session->destroy();
 
         $page->add(
-            "weather/index"
+            "weather/index",
+            $data
         );
 
         return $page->render([
@@ -54,18 +65,53 @@ class WeatherController implements ContainerInjectableInterface
      */
     public function indexActionPost() : object
     {
-        $response = $this->di->get("response");
-        $request = $this->di->get("request");
-        $userip = $request->getPost("userip");
-        $longitud = $request->getPost("longitud");
-        $latitud = $request->getPost("latitud");
         $ip = $this->di->get("ip");
-        if ($ip->validip($userip)) {
-            echo $userip . " is valid";
-        } else {
-            echo $userip . " is invalid";
+        $request = $this->di->get("request");
+        $response = $this->di->get("response");
+        $session = $this->di->get("session");
+        $validator = new ValidWeather($request, $ip);
+        if ($validator->errormsg()) {
+            $session->set("warning", $validator->errormsg());
+            return $response->redirect("weather");
         }
-        die();
-        return $response->redirect("ip");
+        // this loads $apikey
+        include(__DIR__ . '/../../config/api/ipstack.php');
+        // this loads $weatherkey
+        include(__DIR__ . '/../../config/api/openweather.php');
+        $page = $this->di->get("page");
+        $lat = $request->getPost("latitud");
+        $long = $request->getPost("longitud");
+        $geotag = new IPGeotag($apikey);
+        if ($request->getPost("userip")) {
+            $input = $request->getPost("userip");
+            $geoinfo = $geotag->checkdefaultip($input);
+            $lat = $geoinfo["latitude"];
+            $long = $geoinfo["longitude"];
+        }
+        $map = $geotag->printmap($lat, $long);
+        $openweather = new OpenWeather($weatherkey, $lat, $long);
+        $weatherinfo = $openweather->currentweather();
+        if ($request->getPost("infotyp") === "historik") {
+            $historic = $openweather->historicweather();
+            $forecast = "";
+        } else {
+            $forecast = $openweather->forecast();
+            $historic = "";
+        }
+
+        $data = [
+            "weatherinfo" => $weatherinfo,
+            "map" => $map,
+            "forecast" => $forecast,
+            "historic" => $historic
+        ];
+
+        $page->add(
+            "weather/info",
+            $data
+        );
+        return $page->render([
+            "title" => "Weather",
+        ]);
     }
 }

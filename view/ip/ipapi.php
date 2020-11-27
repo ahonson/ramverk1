@@ -3,7 +3,6 @@
 <p>Förkortade IPv6-adresser omvandlas till det långa formatet ("corrected") innan valideringen utförs.</p>
 
 <h2>GET</h2>
-<pre></pre>
 <p><strong>Exempel1</strong>: GET /check?ip=8.8.8.8</p>
 <a href="http://www.student.bth.se/~arts19/dbwebb-kurser/ramverk1/me/redovisa/htdocs/ipapi/check?ip=8.8.8.8">http://www.student.bth.se/~arts19/dbwebb-kurser/ramverk1/me/redovisa/htdocs/ipapi/check?ip=8.8.8.8</a>
 <p><strong>Resultat</strong></p>

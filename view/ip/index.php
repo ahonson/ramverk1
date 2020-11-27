@@ -18,6 +18,3 @@ namespace Anax\View;
 
 <div><?= $ipmsg ?></div>
 <p><?= $inputgeoinfo ?></p>
-
-<p><?= var_dump($mycurl) ?></p>
-<p><?= $mycurl["firstName"] ?></p>

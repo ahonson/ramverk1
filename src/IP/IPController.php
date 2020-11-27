@@ -51,7 +51,7 @@ class IPController implements ContainerInjectableInterface
     {
         // this loads $apikey
         include(__DIR__ . '/../../config/api/ipstack.php');
-        $curl = $this->di->get("curl");
+        // $curl = $this->di->get("curl");
         $page = $this->di->get("page");
         $session = $this->di->get("session");
 
@@ -59,8 +59,8 @@ class IPController implements ContainerInjectableInterface
         $realip = new RealIP();
         $ipaddress = $realip->getRealIpAddr();
         $input = $session->get("userip") ? $session->get("userip") : "";
-        $url = "https://rem.dbwebb.se/api/users/1";
-        $mycurl = $curl->curl($url);
+        // $url = "https://rem.dbwebb.se/api/users/1";
+        // $mycurl = $curl->curl($url);
 
         $userip = new IPCheck($input);
         $ipmsg = $userip->printAllMessages();
@@ -73,8 +73,8 @@ class IPController implements ContainerInjectableInterface
         $data = [
             "usergeoinfo" => $usergeoinfo,
             "inputgeoinfo" => $inputgeoinfo,
-            "ipmsg" => $ipmsg,
-            "mycurl" => $mycurl
+            "ipmsg" => $ipmsg
+            // "mycurl" => $mycurl
         ];
 
         $page->add(
