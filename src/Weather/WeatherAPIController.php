@@ -10,7 +10,7 @@ use Anax\Commons\ContainerInjectableInterface;
 use Anax\Commons\ContainerInjectableTrait;
 use Anax\Route\Exception\NotFoundException;
 use arts19\IP\IPGeotag;
-// use arts19\IP\RealIP;
+use arts19\IP\RealIP;
 
 /**
  * A sample controller to show how a controller class can be implemented.
@@ -36,8 +36,14 @@ class WeatherAPIController implements ContainerInjectableInterface
     public function indexActionGet() : object
     {
         $page = $this->di->get("page");
+        $realip = new RealIP();
+        $ipaddress = $realip->getRealIpAddr();
+        $data = [
+            "ip" => $ipaddress
+        ];
         $page->add(
-            "weather/weatherapi"
+            "weather/weatherapi",
+            $data
         );
 
         return $page->render([
@@ -101,47 +107,40 @@ class WeatherAPIController implements ContainerInjectableInterface
      */
     public function infoActionPost() : array
     {
+        $ip = $this->di->get("ip");
         $request = $this->di->get("request");
-        $ip  = $request->getPost("ip", "");
-        $userip = new IPCheck($ip);
-        $ip4 = $userip->ipv4();
-        $ip6 = $userip->ipv6();
-        $userinput = $userip->getUserInput();
-        $corrected = $userip->getCorrectedInput();
-        $domain = $userip->getDomainName();
-        $ipmsg = $userip->printIPMessage();
-        $domainmsg = $userip->printDomainMessage();
+        $userip  = $request->getPost("userip", "");
+        $lon  = $request->getPost("longitud", "");
+        $lat  = $request->getPost("latitud", "");
+
+        $validator = new ValidAPIWeather($request, $ip);
+        if ($validator->errormsg()) {
+            $myjson = [
+                "msg" => $validator->errormsg()
+            ];
+            return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];
+        }
 
         // this loads $apikey
         include(__DIR__ . '/../../config/api/ipstack.php');
-        $geoip = new IPGeotag($apikey);
-        $continent = $geoip->parseJson($ip, "continent_name");
-        $country = $geoip->parseJson($ip, "country_name");
-        $city = $geoip->parseJson($ip, "city");
-        $zip = $geoip->parseJson($ip, "zip");
-        $language = $geoip->parseJson($ip, "location", "languages", "name");
-        $latitude = $geoip->parseJson($ip, "latitude");
-        $longitude = $geoip->parseJson($ip, "longitude");
-        $map = $geoip->getmap($ip);
+        // this loads $weatherkey
+        include(__DIR__ . '/../../config/api/openweather.php');
+        $geotag = new IPGeotag($apikey);
+        if ($userip) {
+            $geoinfo = $geotag->checkdefaultip($userip);
+            $lat = $geoinfo["latitude"];
+            $lon = $geoinfo["longitude"];
+        }
 
-        $myjson = [
-            "ip4" => $ip4,
-            "ip6" => $ip6,
-            "userinput" => $userinput,
-            "corrected" => $corrected,
-            "domain" => $domain,
-            "ipmsg" => $ipmsg,
-            "domainmsg" => $domainmsg,
-            "continent" => $continent,
-            "country" => $country,
-            "city" => $city,
-            "zip" => $zip,
-            "language" => $language,
-            "latitude" => $latitude,
-            "longitude" => $longitude,
-            "map" => $map
-        ];
-
-        return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];
+        $type  = $request->getPost("type", "");
+        $openweather = new OpenWeather($weatherkey, $lat, $lon);
+        if ($type === "historical") {
+            $data = $openweather->historicweather();
+        } elseif ($type === "forecast") {
+            $data = $openweather->forecast();
+        } else {
+            $data = $openweather->currentweather();
+        }
+        return [json_encode($data, JSON_UNESCAPED_UNICODE)];
     }
 }

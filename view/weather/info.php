@@ -73,4 +73,8 @@
 </table>
 <?php endif ?>
 
+<?php if (!$geoinfo): ?>
 <p><?= $map ?></p>
+<?php else: ?>
+    <p><?= $geoinfo ?></p>
+<?php endif ?>

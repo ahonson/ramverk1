@@ -3,6 +3,10 @@
 
 
 <h2>GET</h2>
+<p><strong>Required parameters</strong>: ip || (lon && lat)</p>
+<p><code>ip</code> must conform to the requirements of ipv4 or ipv6. <code>lon</code> and <code>lat</code> must be a numeric value within the following ranges: -180 <=LON <= 180 and -90 <= LAT <= 90.</p>
+<p><strong>Optional parameters</strong>: type</p>
+<p>The default value is <code>current</code> which gives you information about current weather conditions. <code>forecast</code> gets data for the next seven days, while <code>historical</code> gets data for the previous five days. In this latter case the API makes one request containing five simultaneous API-calls with PHP's <code>multi_curl</code>.</p>
 <p><strong>Exempel1</strong>: GET /info?</p>
 <a href="http://www.student.bth.se/~arts19/dbwebb-kurser/ramverk1/me/redovisa/htdocs/weatherapi/info?">http://www.student.bth.se/~arts19/dbwebb-kurser/ramverk1/me/redovisa/htdocs/weatherapi/info?</a>
 <p><strong>Resultat</strong></p>
@@ -110,3 +114,65 @@
     "name":"Mátraderecske",
     "cod":200
 }</pre>
+
+<h2>POST</h2>
+<p><strong>Exempel1</strong>: POST /info</p>
+<p>Body: {"ip": "94.21.49.200"}</p>
+<p><strong>Resultat</strong></p>
+<pre>{
+    "coord":{
+        "lon":19.15,
+        "lat":47.46
+    },
+    "weather":[
+        {
+            "id":804,
+            "main":"Clouds",
+            "description":"mulet",
+            "icon":"04d"
+        }
+    ],
+    "base":"stations",
+    "main":{
+        "temp":2.17,
+        "feels_like":-0.72,
+        "temp_min":2,
+        "temp_max":2.22,
+        "pressure":1020,
+        "humidity":77
+    },
+    "visibility":9000,
+    "wind":{
+        "speed":1,
+        "deg":210
+    },
+    "clouds":{
+        "all":90
+    },
+    "dt":1606572442,
+    "sys":{
+        "type":1,
+        "id":6663,
+        "country":"HU",
+        "sunrise":1606543611,
+        "sunset":1606575389
+    },
+    "timezone":3600,
+    "id":7284835,
+    "name":"BudapestXIX. kerület",
+    "cod":200
+}</pre>
+
+<p><strong>Egna exempel</strong></p>
+<form class="" action="info" method="post">
+    <!-- <input size="40" type="text" name="ip" value="2012::456:567:23"><br><br> -->
+    <label for="userip">Mata in en giltig IP/adress</label><br>
+    <input size="40" type="text" name="ip" value="<?= $ip ?>"><br><br>
+    <label for="longitud">Eller mata in geografiska koordinater: </label><br>
+    <input size="20" type="text" name="longitud" value="" placeholder="Longitud">
+    <input size="20" type="text" name="latitud" value="" placeholder="Latitud"><br>
+    <input type="radio" name="type" value="current" checked>Aktuellt väder
+    <input type="radio" name="type" value="forecast">Prognos
+    <input type="radio" name="type" value="historical">Historik<br><br>
+    <input type="submit" name="save" value="Testa">
+</form>

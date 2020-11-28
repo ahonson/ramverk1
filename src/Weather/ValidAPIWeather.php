@@ -18,9 +18,15 @@ class ValidAPIWeather
 
     public function __construct(object $userinput, object $ip)
     {
-        $this->latitud = $userinput->getGet("lat", null);
-        $this->longitud = $userinput->getGet("lon", null);
-        $this->userip = $userinput->getGet("ip", null);
+        if ($userinput->getMethod() === "GET") {
+            $this->latitud = $userinput->getGet("lat", null);
+            $this->longitud = $userinput->getGet("lon", null);
+            $this->userip = $userinput->getGet("ip", null);
+        } elseif ($userinput->getMethod() === "POST") {
+            $this->latitud = $userinput->getPost("latitud", null);
+            $this->longitud = $userinput->getPost("longitud", null);
+            $this->userip = $userinput->getPost("userip", null);
+        }
         $this->ip = $ip;
     }
 

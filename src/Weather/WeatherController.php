@@ -82,11 +82,13 @@ class WeatherController implements ContainerInjectableInterface
         $lat = $request->getPost("latitud");
         $long = $request->getPost("longitud");
         $geotag = new IPGeotag($apikey);
+        $geoinfo = "";
         if ($request->getPost("userip")) {
             $input = $request->getPost("userip");
             $geoinfo = $geotag->checkdefaultip($input);
             $lat = $geoinfo["latitude"];
             $long = $geoinfo["longitude"];
+            $geoinfo = $geotag->checkinputip($input);
         }
         $map = $geotag->printmap($lat, $long);
         $openweather = new OpenWeather($weatherkey, $lat, $long);
@@ -102,6 +104,7 @@ class WeatherController implements ContainerInjectableInterface
         $data = [
             "weatherinfo" => $weatherinfo,
             "map" => $map,
+            "geoinfo" => $geoinfo,
             "forecast" => $forecast,
             "historic" => $historic
         ];
