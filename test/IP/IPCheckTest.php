@@ -5,8 +5,10 @@ namespace arts19\IP;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Example test class.
- */
+  * A class for validating weather parameters.
+  *
+  * @SuppressWarnings(PHPMD)
+  */
 class IPCheckTest extends TestCase
 {
     /**

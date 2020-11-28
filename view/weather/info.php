@@ -20,7 +20,7 @@
     </tr>
 </table>
 
-<?php if ($forecast): ?>
+<?php if ($forecast) : ?>
 <h2>Prognos</h2>
 <table class="weathertable">
     <tr>
@@ -31,9 +31,8 @@
         <th>Min</th>
         <th>Max</th>
     </tr>
-    <?php foreach ($forecast["daily"] as $row): ?>
-
-    <?php if (date("Y-m-d", $row["dt"]) !== date("Y-m-d")): ?>
+    <?php foreach ($forecast["daily"] as $row) : ?>
+        <?php if (date("Y-m-d", $row["dt"]) !== date("Y-m-d")) : ?>
     <tr>
         <td><?= date("Y-m-d", $row["dt"]) ?></td>
         <td><?= $row["weather"][0]["description"] ?></td>
@@ -42,13 +41,12 @@
         <td><?= $row["temp"]["min"] ?> °C</td>
         <td><?= $row["temp"]["max"] ?> °C</td>
     </tr>
-    <?php endif ?>
+        <?php endif ?>
     <?php endforeach ?>
 </table>
 <?php endif ?>
 
-
-<?php if ($historic): ?>
+<?php if ($historic) : ?>
 <h2>Historik</h2>
 <table class="weathertable">
     <tr>
@@ -59,8 +57,7 @@
         <th>Vind</th>
         <th>Lufttryck</th>
     </tr>
-    <?php foreach ($historic as $row): ?>
-
+    <?php foreach ($historic as $row) : ?>
     <tr>
         <td><?= date("Y-m-d", $row["current"]["dt"]) ?></td>
         <td><?= $row["current"]["weather"][0]["description"] ?></td>
@@ -73,8 +70,8 @@
 </table>
 <?php endif ?>
 
-<?php if (!$geoinfo): ?>
+<?php if (!$geoinfo) : ?>
 <p><?= $map ?></p>
-<?php else: ?>
+<?php else : ?>
     <p><?= $geoinfo ?></p>
 <?php endif ?>

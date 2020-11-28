@@ -68,5 +68,4 @@ class WeatherControllerTest extends TestCase
         $this->assertInstanceOf(ResponseUtility::class, $res1);
         $this->assertInstanceOf(ResponseUtility::class, $res2);
     }
-
 }

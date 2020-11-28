@@ -26,6 +26,10 @@ class ValidAPIWeather
             $this->latitud = $userinput->getPost("latitud", null);
             $this->longitud = $userinput->getPost("longitud", null);
             $this->userip = $userinput->getPost("userip", null);
+        } else {
+            $this->latitud = "";
+            $this->longitud = "";
+            $this->userip = "";
         }
         $this->ip = $ip;
     }
