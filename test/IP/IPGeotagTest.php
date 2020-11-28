@@ -24,6 +24,18 @@ class IPGeotagTest extends TestCase
     /**
      * IPGeotag
      */
+    public function testPrintmap()
+    {
+        include(__DIR__ . '/../../config/api/ipstack.php');
+        $geoip = new IPGeotag($apikey);
+        $res = $geoip->printmap("34.5", "19.5");
+        $this->assertIsString($res);
+    }
+
+
+    /**
+     * IPGeotag
+     */
     public function testcheckuserip()
     {
         include(__DIR__ . '/../../config/api/ipstack.php');

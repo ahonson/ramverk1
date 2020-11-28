@@ -54,4 +54,18 @@ class IPCheckTest extends TestCase
         $res = $ipcheck->setDomainName();
         $this->assertNull($res);
     }
+
+
+    /**
+     * IPCheck
+     */
+    public function testValidIp()
+    {
+        $ip = new IPCheck("4::5");
+        $res = $ip->validip();
+        $ip1 = new IPCheck(":x:x:");
+        $res1 = $ip1->validip();
+        $this->assertTrue($res);
+        $this->assertFalse($res1);
+    }
 }
