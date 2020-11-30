@@ -57,7 +57,7 @@ class WeatherAPIController implements ContainerInjectableInterface
      * ANY METHOD mountpoint/
      * ANY METHOD mountpoint/index
      *
-     * @return object
+     * @return array
      */
     public function infoActionGet() : array
     {
@@ -103,7 +103,7 @@ class WeatherAPIController implements ContainerInjectableInterface
      * ANY METHOD mountpoint/
      * ANY METHOD mountpoint/index
      *
-     * @return object
+     * @return array
      */
     public function infoActionPost() : array
     {

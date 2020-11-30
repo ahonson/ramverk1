@@ -55,7 +55,7 @@ class IPAPIController implements ContainerInjectableInterface
      * ANY METHOD mountpoint/
      * ANY METHOD mountpoint/index
      *
-     * @return object
+     * @return array
      */
     public function checkActionGet() : array
     {
@@ -110,7 +110,7 @@ class IPAPIController implements ContainerInjectableInterface
      * ANY METHOD mountpoint/
      * ANY METHOD mountpoint/index
      *
-     * @return object
+     * @return array
      */
     public function checkActionPost() : array
     {
