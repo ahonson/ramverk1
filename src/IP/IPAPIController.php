@@ -70,9 +70,9 @@ class IPAPIController implements ContainerInjectableInterface
         $ipmsg = $userip->printIPMessage();
         $domainmsg = $userip->printDomainMessage();
 
-        // this loads $apikey
-        include(__DIR__ . '/../../config/api/ipstack.php');
-        $geoip = new IPGeotag($apikey);
+        // this loads $ipkey and $weatherkey
+        include(__DIR__ . '/../../config/api/apikeys.php');
+        $geoip = new IPGeotag($ipkey);
         $continent = $geoip->parseJson($ip, "continent_name");
         $country = $geoip->parseJson($ip, "country_name");
         $city = $geoip->parseJson($ip, "city");
@@ -125,9 +125,9 @@ class IPAPIController implements ContainerInjectableInterface
         $ipmsg = $userip->printIPMessage();
         $domainmsg = $userip->printDomainMessage();
 
-        // this loads $apikey
-        include(__DIR__ . '/../../config/api/ipstack.php');
-        $geoip = new IPGeotag($apikey);
+        // this loads $ipkey and $weatherkey
+        include(__DIR__ . '/../../config/api/apikeys.php');
+        $geoip = new IPGeotag($ipkey);
         $continent = $geoip->parseJson($ip, "continent_name");
         $country = $geoip->parseJson($ip, "country_name");
         $city = $geoip->parseJson($ip, "city");

@@ -74,14 +74,13 @@ class WeatherController implements ContainerInjectableInterface
             $session->set("warning", $validator->errormsg());
             return $response->redirect("weather");
         }
-        // this loads $apikey
-        include(__DIR__ . '/../../config/api/ipstack.php');
-        // this loads $weatherkey
-        include(__DIR__ . '/../../config/api/openweather.php');
+
+        // this loads $ipkey and $weatherkey
+        include(__DIR__ . '/../../config/api/apikeys.php');
         $page = $this->di->get("page");
         $lat = $request->getPost("latitud");
         $long = $request->getPost("longitud");
-        $geotag = new IPGeotag($apikey);
+        $geotag = new IPGeotag($ipkey);
         $geoinfo = "";
         if ($request->getPost("userip")) {
             $input = $request->getPost("userip");

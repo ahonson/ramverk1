@@ -16,16 +16,16 @@ class IPGeotag
      *
      */
 
-    public function __construct(string $apikey)
+    public function __construct(string $ipkey)
     {
-        $this->apikey = $apikey;
+        $this->ipkey = $ipkey;
     }
 
     public function checkuserip() : array
     {
         $ch = curl_init();
         $url = "http://api.ipstack.com/check?access_key=";
-        curl_setopt($ch, CURLOPT_URL, $url . $this->apikey);
+        curl_setopt($ch, CURLOPT_URL, $url . $this->ipkey);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $apiresponse = curl_exec($ch);
 
@@ -37,7 +37,7 @@ class IPGeotag
     {
         $ch = curl_init();
         $url = "http://api.ipstack.com/$input?access_key=";
-        curl_setopt($ch, CURLOPT_URL, $url . $this->apikey);
+        curl_setopt($ch, CURLOPT_URL, $url . $this->ipkey);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $apiresponse = curl_exec($ch);
 
@@ -72,7 +72,7 @@ class IPGeotag
         if ($input) {
             $ch = curl_init();
             $url = "http://api.ipstack.com/$input?access_key=";
-            curl_setopt($ch, CURLOPT_URL, $url . $this->apikey);
+            curl_setopt($ch, CURLOPT_URL, $url . $this->ipkey);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $apiresponse = curl_exec($ch);
 
@@ -104,7 +104,6 @@ class IPGeotag
         $msg = $msg . "<p><strong>Coordinates</strong>: " . $myjson["latitude"] . "°, " . $myjson["longitude"] . "°</p>";
         $msg = $msg . '<iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox='. ($myjson["longitude"] - 1) . '%2C' . ($myjson["latitude"] - 1) . '%2C' . ($myjson["longitude"] + 1) . '%2C' . ($myjson["latitude"] + 1);
         $msg = $msg . '&amp;layer=mapnik&amp;marker=' . $myjson["latitude"] . "%2C" . $myjson["longitude"] . '" style="border: 1px solid black"></iframe><br/>';
-        // $msg = $msg . '<small><a href="https://www.openstreetmap.org/?mlat=47.599&amp;mlon=17.666#map=8/' . $myjson["latitude"] . "/" . $myjson["longitude"] . '">View Larger Map</a></small>';
         $msg = $msg . "<p>Click here for a <a href='https://www.openstreetmap.org/?mlat=" . $myjson["latitude"] . "&mlon=" . $myjson["longitude"] . "#map=10/" . $myjson["latitude"] . "/" . $myjson["longitude"] . "' target='_blank'> larger map</a>.</p>";
         return $msg;
     }

@@ -73,11 +73,9 @@ class WeatherAPIController implements ContainerInjectableInterface
             ];
             return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];
         }
-        // this loads $apikey
-        include(__DIR__ . '/../../config/api/ipstack.php');
-        // this loads $weatherkey
-        include(__DIR__ . '/../../config/api/openweather.php');
-        $geotag = new IPGeotag($apikey);
+        // this loads $ipkey and $weatherkey
+        include(__DIR__ . '/../../config/api/apikeys.php');
+        $geotag = new IPGeotag($ipkey);
         if ($userip) {
             $geoinfo = $geotag->checkdefaultip($userip);
             $lat = $geoinfo["latitude"];
@@ -121,11 +119,9 @@ class WeatherAPIController implements ContainerInjectableInterface
             return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];
         }
 
-        // this loads $apikey
-        include(__DIR__ . '/../../config/api/ipstack.php');
-        // this loads $weatherkey
-        include(__DIR__ . '/../../config/api/openweather.php');
-        $geotag = new IPGeotag($apikey);
+        // this loads $ipkey and $weatherkey
+        include(__DIR__ . '/../../config/api/apikeys.php');
+        $geotag = new IPGeotag($ipkey);
         if ($userip) {
             $geoinfo = $geotag->checkdefaultip($userip);
             $lat = $geoinfo["latitude"];

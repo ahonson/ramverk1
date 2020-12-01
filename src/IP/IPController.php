@@ -49,24 +49,18 @@ class IPController implements ContainerInjectableInterface
      */
     public function indexActionGet() : object
     {
-        // this loads $apikey
-        include(__DIR__ . '/../../config/api/ipstack.php');
-        // $curl = $this->di->get("curl");
+        // this loads $ipkey and $weatherkey
+        include(__DIR__ . '/../../config/api/apikeys.php');
         $page = $this->di->get("page");
         $session = $this->di->get("session");
-
-        // $ipaddress = $_SERVER['REMOTE_ADDR'];
         $realip = new RealIP();
         $ipaddress = $realip->getRealIpAddr();
         $input = $session->get("userip") ? $session->get("userip") : "";
-        // $url = "https://rem.dbwebb.se/api/users/1";
-        // $mycurl = $curl->curl($url);
 
         $userip = new IPCheck($input);
         $ipmsg = $userip->printAllMessages();
-        $inputgeotag = new IPGeotag($apikey);
+        $inputgeotag = new IPGeotag($ipkey);
         $inputgeoinfo = $inputgeotag->checkinputip($input);
-        // $usergeoinfo = $inputgeotag->checkuserip();
         $iptotest = $input ? $input : $ipaddress;
         $usergeoinfo = $inputgeotag->checkdefaultip($iptotest);
 
@@ -74,7 +68,6 @@ class IPController implements ContainerInjectableInterface
             "usergeoinfo" => $usergeoinfo,
             "inputgeoinfo" => $inputgeoinfo,
             "ipmsg" => $ipmsg
-            // "mycurl" => $mycurl
         ];
 
         $page->add(
