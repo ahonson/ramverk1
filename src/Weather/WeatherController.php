@@ -78,16 +78,21 @@ class WeatherController implements ContainerInjectableInterface
         // this loads $ipkey and $weatherkey
         include(__DIR__ . '/../../config/api/apikeys.php');
         $page = $this->di->get("page");
-        $lat = $request->getPost("latitud");
-        $long = $request->getPost("longitud");
+        $lat = $request->getPost("latitud", "");
+        $long = $request->getPost("longitud", "");
         $geotag = new IPGeotag($ipkey);
         $geoinfo = "";
         if ($request->getPost("userip")) {
             $input = $request->getPost("userip");
             $geoinfo = $geotag->checkdefaultip($input);
-            $lat = $geoinfo["latitude"];
-            $long = $geoinfo["longitude"];
+            $lat = $geoinfo["latitude"] ?? "";
+            $long = $geoinfo["longitude"] ?? "";
             $geoinfo = $geotag->checkinputip($input);
+        }
+        if (!($lat && $long)) {
+            $msg = "<p class='warning'>No geodata could be detected.</p>";
+            $session->set("warning", $msg);
+            return $response->redirect("weather");
         }
         $map = $geotag->printmap($lat, $long);
         $openweather = new OpenWeather($weatherkey, $lat, $long);
