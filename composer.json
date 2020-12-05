@@ -7,18 +7,12 @@
     "autoload": {
         "psr-4": {
             "Anax\\": "src/",
-            "arte\\": "src/"
+            "artes\\": "src/"
         }
     },
-    "repositories": [
-            {
-                "type": "vcs",
-                "url": "https://github.com/ahonson/weather"
-            }
-        ],
     "require": {
         "anax/anax-ramverk1-me": "^1.0.0",
-        "arte/weather": "dev-main"
+        "artes/weather": "dev-main"
     },
     "require-dev": {
         "phpunit/phpunit": "^7"
