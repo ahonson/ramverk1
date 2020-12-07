@@ -61,35 +61,7 @@ class WeatherAPIController implements ContainerInjectableInterface
      */
     public function infoActionGet() : array
     {
-        $ip = $this->di->get("ip");
-        $request = $this->di->get("request");
-        $userip  = $request->getGet("ip", "");
-        $lon  = $request->getGet("lon", "");
-        $lat  = $request->getGet("lat", "");
-        $type  = $request->getGet("type", "");
-        $validator = new ValidAPIWeather($request, $ip);
-        if ($validator->errormsg()) {
-            $myjson = [
-                "msg" => $validator->errormsg()
-            ];
-            return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];
-        }
-        // this loads $ipkey and $weatherkey
-        include(ANAX_INSTALL_PATH . '/config/api/apikeys.php');
-        $geotag = new IPGeotag($ipkey);
-        if ($userip) {
-            $geoinfo = $geotag->checkdefaultip($userip);
-            $lat = $geoinfo["latitude"] ?? "";
-            $lon = $geoinfo["longitude"] ?? "";
-        }
-        $data = $this->getWeather($weatherkey, $lat, $lon, $type);
-        if (!($lat && $lon)) {
-            $msg = [
-                "msg" => "No geodata could be detected."
-            ];
-            return [json_encode($msg, JSON_UNESCAPED_UNICODE)];
-        }
-        return [json_encode($data, JSON_UNESCAPED_UNICODE)];
+        return $this->makeJSON();
     }
 
     /**
@@ -102,13 +74,17 @@ class WeatherAPIController implements ContainerInjectableInterface
      */
     public function infoActionPost() : array
     {
+        return $this->makeJSON();
+    }
+
+    public function makeJSON()
+    {
         $ip = $this->di->get("ip");
         $request = $this->di->get("request");
-        $userip  = $request->getPost("userip", "");
-        $lon  = $request->getPost("longitud", "");
-        $lat  = $request->getPost("latitud", "");
-        $type  = $request->getPost("type", "");
-
+        $userip  = $request->getGet("ip", "") ?? $request->getPost("userip", "");
+        $lon  = $request->getGet("lon", "") ?? $request->getPost("longitud", "");
+        $lat  = $request->getGet("lat", "") ?? $request->getPost("latitud", "");
+        $type  = $request->getGet("type", "") ?? $request->getPost("type", "");
         $validator = new ValidAPIWeather($request, $ip);
         if ($validator->errormsg()) {
             $myjson = [
@@ -116,7 +92,21 @@ class WeatherAPIController implements ContainerInjectableInterface
             ];
             return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];
         }
+        $alldata = $this->generateData($userip, $lat, $lon, $type);
+        $data = $alldata[0];
+        if (!(($lat|| $alldata[1]) && ($lon || $alldata[2]))) {
+            $msg = [
+                "msg" => "No geodata could be detected."
+            ];
+            return [json_encode($msg, JSON_UNESCAPED_UNICODE)];
+        }
+        return [json_encode($data, JSON_UNESCAPED_UNICODE)];
+    }
 
+    private function generateData($userip, $lat, $lon, $type)
+    {
+        $ipkey = "";
+        $weatherkey = "";
         // this loads $ipkey and $weatherkey
         include(ANAX_INSTALL_PATH . '/config/api/apikeys.php');
         $geotag = new IPGeotag($ipkey);
@@ -126,13 +116,7 @@ class WeatherAPIController implements ContainerInjectableInterface
             $lon = $geoinfo["longitude"] ?? "";
         }
         $data = $this->getWeather($weatherkey, $lat, $lon, $type);
-        if (!($lat && $lon)) {
-            $msg = [
-                "msg" => "No geodata could be detected."
-            ];
-            return [json_encode($msg, JSON_UNESCAPED_UNICODE)];
-        }
-        return [json_encode($data, JSON_UNESCAPED_UNICODE)];
+        return [$data, $lat, $lon];
     }
 
     /**

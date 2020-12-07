@@ -9,13 +9,19 @@ namespace artes\Weather;
   */
 class ValidWeather
 {
+    private $latitud;
+    private $longitud;
+    private $userip;
+    private $ipadress;
+    private $koordinater;
+    private $ip;
+
     /**
      * Constructor to initiate an ValidWeather object,
      *
      * @param string $userinput
      *
      */
-
     public function __construct(object $userinput, object $ip)
     {
         $this->latitud = $userinput->getPost("latitud");
@@ -46,15 +52,20 @@ class ValidWeather
         return false;
     }
 
-    private function validip() : bool
-    {
-        return $this->ip->validip($this->userip);
-    }
+    // public function validcoord() : bool
+    // {
+    //     if (is_numeric($this->longitud) && is_numeric($this->latitud)) {
+    //         if (abs($this->latitud) <= 90 && abs($this->longitud) <= 180) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 
-    private function validcoord() : bool
+    public function validcoord($lon, $lat) : bool
     {
-        if (is_numeric($this->longitud) && is_numeric($this->latitud)) {
-            if (abs($this->latitud) <= 90 && abs($this->longitud) <= 180) {
+        if (is_numeric($lon) && is_numeric($lat)) {
+            if (abs($lat) <= 90 && abs($lon) <= 180) {
                 return true;
             }
         }
@@ -64,18 +75,15 @@ class ValidWeather
     public function errormsg() : string
     {
         if ($this->missingip() || $this->missingcoord()) {
-            $msg = "Missing input. Try again";
-        } elseif (!$this->validip() && $this->ipadress) {
-            $msg = "Invalid IP-address. Try again";
-        } elseif (!$this->validcoord() && $this->koordinater) {
-            $msg = "Invalid coordinates. Try again";
-        } else {
-            $msg = "";
+            return $this->wrapmsg("Missing input. Try again");
         }
-        if ($msg) {
-            $msg = $this->wrapmsg($msg);
+        if (!$this->ip->validip($this->userip) && $this->ipadress) {
+            return $this->wrapmsg("Invalid IP-address. Try again");
         }
-        return $msg;
+        if (!$this->validcoord($this->longitud, $this->latitud) && $this->koordinater) {
+            return $this->wrapmsg("Invalid coordinates. Try again");
+        }
+        return "";
     }
 
     private function wrapmsg($msg) : string

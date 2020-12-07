@@ -74,39 +74,41 @@ class WeatherController implements ContainerInjectableInterface
             $session->set("warning", $validator->errormsg());
             return $response->redirect("weather");
         }
-
-        // this loads $ipkey and $weatherkey
-        include(ANAX_INSTALL_PATH . '/config/api/apikeys.php');
         $page = $this->di->get("page");
         $lat = $request->getPost("latitud");
         $long = $request->getPost("longitud");
         $type = $request->getPost("infotyp");
+        $userip = $request->getPost("userip");
+        $alldata = $this->generateData($userip, $lat, $long, $type);
+        $data = $alldata[0];
+        $page->add("weather/info", $data);
+        if (!(($lat|| $alldata[1]) && ($long || $alldata[2]))) {
+            $msg = "<p class='warning'>No geodata could be detected.</p>";
+            $session->set("warning", $msg);
+            return $response->redirect("weather");
+        }
+        return $page->render(["title" => "Weather"]);
+    }
+
+    public function generateData($userip, $lat, $long, $type)
+    {
+        $ipkey = "";
+        $weatherkey = "";
+        // this loads $ipkey and $weatherkey
+        include(ANAX_INSTALL_PATH . '/config/api/apikeys.php');
         $geotag = new IPGeotag($ipkey);
         $geoinfo = "";
-        if ($request->getPost("userip")) {
-            $input = $request->getPost("userip");
-            $geoinfo = $geotag->checkdefaultip($input);
+        if ($userip) {
+            $geoinfo = $geotag->checkdefaultip($userip);
             $lat = $geoinfo["latitude"] ?? "";
             $long = $geoinfo["longitude"] ?? "";
-            $geoinfo = $geotag->checkinputip($input);
+            $geoinfo = $geotag->checkinputip($userip);
         }
         $map = $geotag->printmap($lat, $long);
         $data = $this->getWeather($weatherkey, $lat, $long, $type);
         $data["map"] = $map;
         $data["geoinfo"] = $geoinfo;
-        $page->add(
-            "weather/info",
-            $data
-        );
-
-        if (!($lat && $long)) {
-            $msg = "<p class='warning'>No geodata could be detected.</p>";
-            $session->set("warning", $msg);
-            return $response->redirect("weather");
-        }
-        return $page->render([
-            "title" => "Weather",
-        ]);
+        return [$data, $lat, $long];
     }
 
     /**

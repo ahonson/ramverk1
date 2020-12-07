@@ -59,50 +59,8 @@ class IPAPIController implements ContainerInjectableInterface
      */
     public function checkActionGet() : array
     {
-        $request = $this->di->get("request");
-        $ip  = $request->getGet("ip", "");
-        $userip = new IPCheck($ip);
-        $ip4 = $userip->ipv4();
-        $ip6 = $userip->ipv6();
-        $userinput = $userip->getUserInput();
-        $corrected = $userip->getCorrectedInput();
-        $domain = $userip->getDomainName();
-        $ipmsg = $userip->printIPMessage();
-        $domainmsg = $userip->printDomainMessage();
-
-        // this loads $ipkey and $weatherkey
-        include(ANAX_INSTALL_PATH . '/config/api/apikeys.php');
-        $geoip = new IPGeotag($ipkey);
-        $continent = $geoip->parseJson($ip, "continent_name");
-        $country = $geoip->parseJson($ip, "country_name");
-        $city = $geoip->parseJson($ip, "city");
-        $zip = $geoip->parseJson($ip, "zip");
-        $language = $geoip->parseJson($ip, "location", "languages", "name");
-        $latitude = $geoip->parseJson($ip, "latitude");
-        $longitude = $geoip->parseJson($ip, "longitude");
-        $map = $geoip->getmap($ip);
-
-        $myjson = [
-            "ip4" => $ip4,
-            "ip6" => $ip6,
-            "userinput" => $userinput,
-            "corrected" => $corrected,
-            "domain" => $domain,
-            "ipmsg" => $ipmsg,
-            "domainmsg" => $domainmsg,
-            "continent" => $continent,
-            "country" => $country,
-            "city" => $city,
-            "zip" => $zip,
-            "language" => $language,
-            "latitude" => $latitude,
-            "longitude" => $longitude,
-            "map" => $map
-        ];
-
-        return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];
+        return $this->makeJSON();
     }
-
 
     /**
      * This is the index method action, it handles:
@@ -114,8 +72,23 @@ class IPAPIController implements ContainerInjectableInterface
      */
     public function checkActionPost() : array
     {
+        return $this->makeJSON();
+    }
+
+    public function makeJSON()
+    {
         $request = $this->di->get("request");
-        $ip  = $request->getPost("ip", "");
+        $ip  = $request->getGet("ip", "");
+        if (!$ip) {
+            $ip  = $request->getPost("ip", "");
+        }
+        $firstJSON = $this->generateJSON1($ip);
+        $myjson = $this->generateJSON2($firstJSON, $ip);
+        return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];
+    }
+
+    public function generateJSON1($ip)
+    {
         $userip = new IPCheck($ip);
         $ip4 = $userip->ipv4();
         $ip6 = $userip->ipv6();
@@ -124,20 +97,7 @@ class IPAPIController implements ContainerInjectableInterface
         $domain = $userip->getDomainName();
         $ipmsg = $userip->printIPMessage();
         $domainmsg = $userip->printDomainMessage();
-
-        // this loads $ipkey and $weatherkey
-        include(ANAX_INSTALL_PATH . '/config/api/apikeys.php');
-        $geoip = new IPGeotag($ipkey);
-        $continent = $geoip->parseJson($ip, "continent_name");
-        $country = $geoip->parseJson($ip, "country_name");
-        $city = $geoip->parseJson($ip, "city");
-        $zip = $geoip->parseJson($ip, "zip");
-        $language = $geoip->parseJson($ip, "location", "languages", "name");
-        $latitude = $geoip->parseJson($ip, "latitude");
-        $longitude = $geoip->parseJson($ip, "longitude");
-        $map = $geoip->getmap($ip);
-
-        $myjson = [
+        $firstJSON = [
             "ip4" => $ip4,
             "ip6" => $ip6,
             "userinput" => $userinput,
@@ -145,16 +105,25 @@ class IPAPIController implements ContainerInjectableInterface
             "domain" => $domain,
             "ipmsg" => $ipmsg,
             "domainmsg" => $domainmsg,
-            "continent" => $continent,
-            "country" => $country,
-            "city" => $city,
-            "zip" => $zip,
-            "language" => $language,
-            "latitude" => $latitude,
-            "longitude" => $longitude,
-            "map" => $map
         ];
+        return $firstJSON;
+    }
 
-        return [json_encode($myjson, JSON_UNESCAPED_UNICODE)];
+    public function generateJSON2($myjson, $ip)
+    {
+        $ipkey = "";
+        // this loads $ipkey and $weatherkey
+        include(ANAX_INSTALL_PATH . '/config/api/apikeys.php');
+        $geoip = new IPGeotag($ipkey);
+        $myjson["continent"] = $geoip->parseJson($ip, "continent_name");
+        $myjson["country"] = $geoip->parseJson($ip, "country_name");
+        $myjson["city"] = $geoip->parseJson($ip, "city");
+        $myjson["zip"] = $geoip->parseJson($ip, "zip");
+        $myjson["language"] = $geoip->parseJson($ip, "location", "languages", "name");
+        $myjson["latitude"] = $geoip->parseJson($ip, "latitude");
+        $myjson["longitude"] = $geoip->parseJson($ip, "longitude");
+        $myjson["map"] = $geoip->getmap($ip);
+
+        return $myjson;
     }
 }

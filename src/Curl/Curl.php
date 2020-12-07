@@ -1,6 +1,6 @@
 <?php
 
-namespace arts19\Curl;
+namespace artes\Curl;
 
 /**
   * A class for curl requests
@@ -15,14 +15,14 @@ class Curl
      *
      */
 
-    public function curl($url) : array
+    public function curl($url)
     {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $apiresponse = curl_exec($ch);
+        curl_setopt(/** @scrutinizer ignore-type */ $ch, CURLOPT_URL, $url);
+        curl_setopt(/** @scrutinizer ignore-type */ $ch, CURLOPT_RETURNTRANSFER, 1);
+        $apiresponse = curl_exec(/** @scrutinizer ignore-type */ $ch);
 
-        $jsonresp = json_decode($apiresponse, JSON_UNESCAPED_UNICODE);
+        $jsonresp = json_decode($apiresponse, /** @scrutinizer ignore-type */ JSON_UNESCAPED_UNICODE);
         return $jsonresp;
     }
 }

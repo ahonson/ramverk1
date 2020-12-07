@@ -2,6 +2,8 @@
 
 namespace artes\IP;
 
+use artes\Curl\Curl;
+
 /**
   * A class for geotagging IP addresses.
   *
@@ -9,13 +11,14 @@ namespace artes\IP;
   */
 class IPGeotag
 {
+    private $ipkey;
+
     /**
      * Constructor to initiate an IP object,
      *
      * @param string $userinput
      *
      */
-
     public function __construct(string $ipkey)
     {
         $this->ipkey = $ipkey;
@@ -23,25 +26,19 @@ class IPGeotag
 
     public function checkuserip() : array
     {
-        $ch = curl_init();
-        $url = "http://api.ipstack.com/check?access_key=";
-        curl_setopt($ch, CURLOPT_URL, $url . $this->ipkey);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $apiresponse = curl_exec($ch);
+        $mycurl = new Curl();
+        $url = "http://api.ipstack.com/check?access_key=" . $this->ipkey;
+        $jsonresp = $mycurl->curl($url);
 
-        $jsonresp = json_decode($apiresponse, JSON_UNESCAPED_UNICODE);
         return $jsonresp;
     }
 
     public function checkdefaultip($input) : array
     {
-        $ch = curl_init();
-        $url = "http://api.ipstack.com/$input?access_key=";
-        curl_setopt($ch, CURLOPT_URL, $url . $this->ipkey);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $apiresponse = curl_exec($ch);
+        $mycurl = new Curl();
+        $url = "http://api.ipstack.com/$input?access_key=" . $this->ipkey;
+        $jsonresp = $mycurl->curl($url);
 
-        $jsonresp = json_decode($apiresponse, JSON_UNESCAPED_UNICODE);
         if (!$jsonresp) {
             $jsonresp = ["ip" => ""];
         }
@@ -75,15 +72,11 @@ class IPGeotag
     public function checkinputip($input) : string
     {
         if ($input) {
-            $ch = curl_init();
-            $url = "http://api.ipstack.com/$input?access_key=";
-            curl_setopt($ch, CURLOPT_URL, $url . $this->ipkey);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $apiresponse = curl_exec($ch);
-
-            $jsonresp = json_decode($apiresponse, JSON_UNESCAPED_UNICODE);
+            $mycurl = new Curl();
+            $url = "http://api.ipstack.com/$input?access_key=" . $this->ipkey;
+            $jsonresp = $mycurl->curl($url);
             if (isset($jsonresp["type"])) {
-                if ($jsonresp["type"] === "ipv4" || $jsonresp["type"] === "ipv6") {
+                if (($jsonresp["type"] === "ipv4" || $jsonresp["type"] === "ipv6") && $jsonresp["latitude"]) {
                     return $this->printGeoDetails($jsonresp);
                 }
             }
