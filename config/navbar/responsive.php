@@ -84,5 +84,10 @@ return [
             "url" => "weather",
             "title" => "Väder API",
         ],
+        [
+            "text" => "Böcker",
+            "url" => "books",
+            "title" => "Book - CRUD",
+        ],
     ],
 ];
