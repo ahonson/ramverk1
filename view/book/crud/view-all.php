@@ -18,33 +18,35 @@ $urlToDelete = url("book/delete");
 
 
 
-?><h1>View all items</h1>
+?><h1>Visa samtliga böcker</h1>
 
 <p>
-    <a href="<?= $urlToCreate ?>">Create</a> | 
-    <a href="<?= $urlToDelete ?>">Delete</a>
+    <a href="<?= $urlToCreate ?>">Skapa</a> |
+    <a href="<?= $urlToDelete ?>">Radera</a>
 </p>
 
 <?php if (!$items) : ?>
-    <p>There are no items to show.</p>
+    <p>Det finns inga böcker att visa.</p>
 <?php
     return;
 endif;
 ?>
 
-<table>
+<table class="booktable">
     <tr>
         <th>Id</th>
-        <th>Column1</th>
-        <th>Column2</th>
+        <th>Författare</th>
+        <th>Titel</th>
+        <th>Bild</th>
     </tr>
     <?php foreach ($items as $item) : ?>
     <tr>
-        <td>
+        <td class="bookid">
             <a href="<?= url("book/update/{$item->id}"); ?>"><?= $item->id ?></a>
         </td>
-        <td><?= $item->column1 ?></td>
-        <td><?= $item->column2 ?></td>
+        <td class="bookdata"><?= $item->column1 ?></td>
+        <td class="bookdata"><?= $item->column2 ?></td>
+        <td class="bookimage"><img src="<?= $item->column3 ?>" alt="<?= $item->column2 ?>"></td>
     </tr>
     <?php endforeach; ?>
 </table>

@@ -6,8 +6,8 @@ return [
     "routes" => [
         [
             "info" => "Book - CRUD",
-            "mount" => "books",
-            "handler" => "\artes\Books\BookController",
+            "mount" => "book",
+            "handler" => "\artes\Book\BookController",
         ],
     ]
 ];

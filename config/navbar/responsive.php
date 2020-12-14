@@ -86,7 +86,7 @@ return [
         ],
         [
             "text" => "Böcker",
-            "url" => "books",
+            "url" => "book",
             "title" => "Book - CRUD",
         ],
     ],
